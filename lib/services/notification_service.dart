@@ -1,5 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:firebase_database/firebase_database.dart';
 import '../models/notification.dart';
 
 class NotificationService {
@@ -82,7 +82,7 @@ class NotificationService {
       importance: _getImportance(type),
       priority: Priority.high,
       icon: '@mipmap/ic_launcher',
-      color: _getNotificationColor(type),
+      color: Color(_getNotificationColor(type) ?? 0xFF2196F3),
       playSound: true,
       enableVibration: true,
     );

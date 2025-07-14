@@ -125,7 +125,7 @@ class Dose {
   Dose copyWith({
     String? id,
     String? name,
-    String? chamber,
+    int? chamber,
     DateTime? time,
     DateTime? startDate,
     DateTime? endDate,

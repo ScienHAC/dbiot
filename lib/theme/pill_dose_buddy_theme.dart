@@ -29,7 +29,7 @@ class PillDoseBuddyTheme {
         elevation: 2,
         centerTitle: true,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: cardColor,
         elevation: 4,
         shadowColor: Colors.black26,
@@ -128,7 +128,7 @@ class PillDoseBuddyTheme {
         elevation: 2,
         centerTitle: true,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: const Color(0xFF2C2C2C),
         elevation: 4,
         shadowColor: Colors.black54,
