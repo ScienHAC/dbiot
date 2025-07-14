@@ -1,4 +1,4 @@
-package com.vercel.dbiot.dbiot
+package com.iotdevx.pill
 
 import io.flutter.embedding.android.FlutterActivity
 

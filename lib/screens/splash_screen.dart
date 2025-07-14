@@ -20,6 +20,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   @override
   void initState() {
     super.initState();
+    print('SplashScreen: initState called');
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
@@ -43,40 +44,15 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     _animationController.forward();
 
-    // Wait for animation and then check auth state
+    // Wait for animation and then navigate directly to login
     Future.delayed(const Duration(milliseconds: 2500), () {
-      _checkAuthAndNavigate();
+      print('SplashScreen: Navigating to login screen');
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+        );
+      }
     });
-  }
-
-  void _checkAuthAndNavigate() {
-    final authState = ref.read(authStateProvider);
-    authState.when(
-      data: (user) {
-        if (mounted) {
-          if (user != null) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => const DashboardScreen()),
-            );
-          } else {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => const LoginScreen()),
-            );
-          }
-        }
-      },
-      loading: () {
-        // Continue showing splash while loading
-        Future.delayed(const Duration(milliseconds: 1000), _checkAuthAndNavigate);
-      },
-      error: (error, stackTrace) {
-        if (mounted) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const LoginScreen()),
-          );
-        }
-      },
-    );
   }
 
   @override

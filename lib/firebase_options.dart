@@ -41,51 +41,51 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'your_web_api_key',
-    appId: 'your_web_app_id',
-    messagingSenderId: 'your_messaging_sender_id',
-    projectId: 'your_project_id',
-    authDomain: 'your_project_id.firebaseapp.com',
-    databaseURL: 'https://your_project_id-default-rtdb.firebaseio.com',
-    storageBucket: 'your_project_id.appspot.com',
+    apiKey: 'AIzaSyBchrUQznnq0FQpjInEkumcQT0VNQC1Nyw',
+    appId: '1:678890602245:web:31016c',
+    messagingSenderId: '678890602245',
+    projectId: 'iot-prj-ac910',
+    authDomain: 'iot-prj-ac910.firebaseapp.com',
+    databaseURL: 'https://iot-prj-ac910-default-rtdb.firebaseio.com',
+    storageBucket: 'iot-prj-ac910.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'your_android_api_key',
-    appId: 'your_android_app_id',
-    messagingSenderId: 'your_messaging_sender_id',
-    projectId: 'your_project_id',
-    databaseURL: 'https://your_project_id-default-rtdb.firebaseio.com',
-    storageBucket: 'your_project_id.appspot.com',
+    apiKey: 'AIzaSyBchrUQznnq0FQpjInEkumcQT0VNQC1Nyw',
+    appId: '1:678890602245:android:5c24a1cedf20440e31016c',
+    messagingSenderId: '678890602245',
+    projectId: 'iot-prj-ac910',
+    databaseURL: 'https://iot-prj-ac910-default-rtdb.firebaseio.com',
+    storageBucket: 'iot-prj-ac910.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'your_ios_api_key',
-    appId: 'your_ios_app_id',
-    messagingSenderId: 'your_messaging_sender_id',
-    projectId: 'your_project_id',
-    databaseURL: 'https://your_project_id-default-rtdb.firebaseio.com',
-    storageBucket: 'your_project_id.appspot.com',
-    iosBundleId: 'com.example.dbiot',
+    apiKey: 'AIzaSyBchrUQznnq0FQpjInEkumcQT0VNQC1Nyw',
+    appId: '1:678890602245:ios:31016c',
+    messagingSenderId: '678890602245',
+    projectId: 'iot-prj-ac910',
+    databaseURL: 'https://iot-prj-ac910-default-rtdb.firebaseio.com',
+    storageBucket: 'iot-prj-ac910.firebasestorage.app',
+    iosBundleId: 'com.iotdevx.pill',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'your_macos_api_key',
-    appId: 'your_macos_app_id',
-    messagingSenderId: 'your_messaging_sender_id',
-    projectId: 'your_project_id',
-    databaseURL: 'https://your_project_id-default-rtdb.firebaseio.com',
-    storageBucket: 'your_project_id.appspot.com',
-    iosBundleId: 'com.example.dbiot',
+    apiKey: 'AIzaSyBchrUQznnq0FQpjInEkumcQT0VNQC1Nyw',
+    appId: '1:678890602245:macos:31016c',
+    messagingSenderId: '678890602245',
+    projectId: 'iot-prj-ac910',
+    databaseURL: 'https://iot-prj-ac910-default-rtdb.firebaseio.com',
+    storageBucket: 'iot-prj-ac910.firebasestorage.app',
+    iosBundleId: 'com.iotdevx.pill',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'your_windows_api_key',
-    appId: 'your_windows_app_id',
-    messagingSenderId: 'your_messaging_sender_id',
-    projectId: 'your_project_id',
-    authDomain: 'your_project_id.firebaseapp.com',
-    databaseURL: 'https://your_project_id-default-rtdb.firebaseio.com',
-    storageBucket: 'your_project_id.appspot.com',
+    apiKey: 'AIzaSyBchrUQznnq0FQpjInEkumcQT0VNQC1Nyw',
+    appId: '1:678890602245:windows:31016c',
+    messagingSenderId: '678890602245',
+    projectId: 'iot-prj-ac910',
+    authDomain: 'iot-prj-ac910.firebaseapp.com',
+    databaseURL: 'https://iot-prj-ac910-default-rtdb.firebaseio.com',
+    storageBucket: 'iot-prj-ac910.firebasestorage.app',
   );
 }

@@ -145,4 +145,23 @@ class AuthService {
       throw _handleAuthException(e);
     }
   }
+
+  // Anonymous authentication method for demo
+  Future<UserCredential> signInAnonymously() async {
+    try {
+      final userCredential = await _auth.signInAnonymously();
+      
+      // Initialize user data in database
+      await _databaseService.initializeUserData();
+      
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw _handleAuthException(e);
+    }
+  }
+
+  // Test authentication method for development - now uses anonymous auth
+  Future<UserCredential> signInWithTestAccount() async {
+    return await signInAnonymously();
+  }
 }
