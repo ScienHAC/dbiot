@@ -25,12 +25,14 @@ class _AddEditDoseScreenState extends ConsumerState<AddEditDoseScreen> {
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now().add(const Duration(days: 30));
   bool _isLoading = false;
+  List<int> _availableChambers = [0, 1, 2, 3];
 
   bool get _isEditing => widget.dose != null;
 
   @override
   void initState() {
     super.initState();
+    _loadAvailableChambers();
     if (_isEditing) {
       _loadDoseData();
     } else {
@@ -43,6 +45,34 @@ class _AddEditDoseScreenState extends ConsumerState<AddEditDoseScreen> {
         9, // 9 AM default
         0,
       );
+    }
+  }
+
+  Future<void> _loadAvailableChambers() async {
+    try {
+      final databaseService = ref.read(databaseServiceProvider);
+      final available = await databaseService.getAvailableChambers(
+        excludeDoseId: _isEditing ? widget.dose!.id : null,
+      );
+      
+      setState(() {
+        _availableChambers = available;
+        // If editing and current chamber is not in available list, add it
+        if (_isEditing && !_availableChambers.contains(widget.dose!.chamber)) {
+          _availableChambers.add(widget.dose!.chamber);
+          _availableChambers.sort();
+        }
+        // Set first available chamber as default for new doses
+        if (!_isEditing && _availableChambers.isNotEmpty) {
+          _selectedChamber = _availableChambers.first;
+        }
+      });
+    } catch (e) {
+      print('Error loading available chambers: $e');
+      // Fallback to all chambers
+      setState(() {
+        _availableChambers = [0, 1, 2, 3];
+      });
     }
   }
 
@@ -231,23 +261,57 @@ class _AddEditDoseScreenState extends ConsumerState<AddEditDoseScreen> {
                       ),
                       const SizedBox(height: 16),
                       DropdownButtonFormField<int>(
-                        value: _selectedChamber,
-                        decoration: const InputDecoration(
+                        value: _availableChambers.contains(_selectedChamber) ? _selectedChamber : null,
+                        decoration: InputDecoration(
                           labelText: 'Chamber',
-                          prefixIcon: Icon(Icons.inventory_2),
+                          prefixIcon: const Icon(Icons.inventory_2),
+                          helperText: _availableChambers.isEmpty 
+                              ? 'All chambers are occupied' 
+                              : 'Available chambers only',
                         ),
-                        items: [0, 1, 2, 3]
+                        items: _availableChambers
                             .map((chamber) => DropdownMenuItem(
                                   value: chamber,
-                                  child: Text('Chamber ${['A', 'B', 'C', 'D'][chamber]}'),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 24,
+                                        height: 24,
+                                        decoration: BoxDecoration(
+                                          color: _getChamberColor(chamber),
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            ['A', 'B', 'C', 'D'][chamber],
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Text('Chamber ${['A', 'B', 'C', 'D'][chamber]}'),
+                                    ],
+                                  ),
                                 ))
                             .toList(),
-                        onChanged: (value) {
+                        onChanged: _availableChambers.isEmpty ? null : (value) {
                           if (value != null) {
                             setState(() {
                               _selectedChamber = value;
                             });
                           }
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return _availableChambers.isEmpty 
+                                ? 'No chambers available. Delete a medication first.' 
+                                : 'Please select a chamber';
+                          }
+                          return null;
                         },
                       ),
                       const SizedBox(height: 16),
@@ -416,6 +480,16 @@ class _AddEditDoseScreenState extends ConsumerState<AddEditDoseScreen> {
         ),
       ),
     );
+  }
+
+  Color _getChamberColor(int chamber) {
+    final colors = [
+      Colors.blue,    // Chamber A (0)
+      Colors.green,   // Chamber B (1)
+      Colors.orange,  // Chamber C (2)
+      Colors.purple,  // Chamber D (3)
+    ];
+    return colors[chamber % colors.length];
   }
 
   void _showDeleteDialog() {

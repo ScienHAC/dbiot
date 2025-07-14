@@ -44,21 +44,48 @@ class Dose {
     } else {
       chamberValue = json['chamber'] ?? 0;
     }
+
+    // Handle time parsing from ESP32 hour/minute or timestamp
+    DateTime timeValue;
+    if (json['hour'] != null && json['minute'] != null) {
+      final now = DateTime.now();
+      timeValue = DateTime(now.year, now.month, now.day, json['hour'], json['minute']);
+    } else if (json['time'] != null) {
+      timeValue = DateTime.fromMillisecondsSinceEpoch(json['time']);
+    } else {
+      timeValue = DateTime.now();
+    }
+
+    // Handle date parsing from ESP32 ISO strings or timestamps
+    DateTime startDateValue;
+    if (json['fromDate'] != null) {
+      startDateValue = DateTime.parse(json['fromDate']);
+    } else if (json['startDate'] != null) {
+      startDateValue = DateTime.fromMillisecondsSinceEpoch(json['startDate']);
+    } else {
+      startDateValue = DateTime.now();
+    }
+
+    DateTime endDateValue;
+    if (json['toDate'] != null) {
+      endDateValue = DateTime.parse(json['toDate']);
+    } else if (json['endDate'] != null) {
+      endDateValue = DateTime.fromMillisecondsSinceEpoch(json['endDate']);
+    } else {
+      endDateValue = DateTime.now().add(const Duration(days: 30));
+    }
+
+    // Handle count/pills field
+    int countValue = json['pills'] ?? json['count'] ?? 1;
     
     return Dose(
       id: id,
       name: json['name'] ?? '',
       chamber: chamberValue,
-      time: json['time'] != null 
-          ? DateTime.fromMillisecondsSinceEpoch(json['time'])
-          : DateTime.now(),
-      startDate: json['startDate'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(json['startDate'])
-          : DateTime.now(),
-      endDate: json['endDate'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(json['endDate'])
-          : DateTime.now().add(const Duration(days: 30)),
-      count: json['count'] ?? 1,
+      time: timeValue,
+      startDate: startDateValue,
+      endDate: endDateValue,
+      count: countValue,
       conditions: json['conditions'],
       status: json['status'] != null
           ? DoseStatus.values.firstWhere(
@@ -99,6 +126,11 @@ class Dose {
       'minute': time.minute,
       'dispensed': dispensed,
       'lastDispensed': lastDispensed ?? '',
+      'conditions': conditions ?? '',
+      'fromDate': startDate.toIso8601String(),
+      'toDate': endDate.toIso8601String(),
+      'pills': count,
+      'isExisting': true,
     };
   }
 

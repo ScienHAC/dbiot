@@ -104,6 +104,53 @@ class DatabaseService {
     ]);
   }
 
+  // Get occupied chambers
+  Future<Set<int>> getOccupiedChambers() async {
+    final snapshot = await _medicationsRef.get();
+    final data = snapshot.value as Map<dynamic, dynamic>?;
+    
+    if (data == null) return <int>{};
+    
+    final occupiedChambers = <int>{};
+    for (final entry in data.entries) {
+      final medicationData = Map<String, dynamic>.from(entry.value);
+      final chamber = medicationData['chamber'];
+      if (chamber != null) {
+        occupiedChambers.add(chamber is int ? chamber : int.tryParse(chamber.toString()) ?? 0);
+      }
+    }
+    
+    return occupiedChambers;
+  }
+
+  // Get available chambers (excluding current dose if editing)
+  Future<List<int>> getAvailableChambers({String? excludeDoseId}) async {
+    final snapshot = await _medicationsRef.get();
+    final data = snapshot.value as Map<dynamic, dynamic>?;
+    
+    final occupiedChambers = <int>{};
+    
+    if (data != null) {
+      for (final entry in data.entries) {
+        final medicationId = entry.key.toString();
+        // Skip the current dose if we're editing
+        if (excludeDoseId != null && medicationId == excludeDoseId) {
+          continue;
+        }
+        
+        final medicationData = Map<String, dynamic>.from(entry.value);
+        final chamber = medicationData['chamber'];
+        if (chamber != null) {
+          occupiedChambers.add(chamber is int ? chamber : int.tryParse(chamber.toString()) ?? 0);
+        }
+      }
+    }
+    
+    // Return chambers 0-3 that are not occupied
+    final allChambers = [0, 1, 2, 3];
+    return allChambers.where((chamber) => !occupiedChambers.contains(chamber)).toList();
+  }
+
   Future<void> deleteDose(String doseId) async {
     await Future.wait([
       _medicationsRef.child(doseId).remove(),
